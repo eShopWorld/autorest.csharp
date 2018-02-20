@@ -22,7 +22,7 @@ namespace AutoRest.CSharp.Azure.Fluent
 {
     public class CodeGeneratorCsaf : CodeGeneratorCsa
     {
-        private const string ClientRuntimePackage = "Microsoft.Rest.ClientRuntime.Azure.3.2.0";
+        private new const string ClientRuntimePackage = "Microsoft.Rest.ClientRuntime.Azure.3.2.0";
 
         protected override string GeneratedSourcesBaseFolder => "Generated/";
 

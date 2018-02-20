@@ -280,7 +280,6 @@ namespace AutoRest.CSharp
 
         public override string GenerateSample(bool isolateSnippet, CodeModel cm, MethodGroup g, Method m, string exampleName, AutoRest.Core.Model.XmsExtensions.Example example)
         {
-            var clientInstanceName = "client";
             var codeModel = cm as CodeModelCs;
             var method = m as MethodCs;
             var group = g as MethodGroupCs;
