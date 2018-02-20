@@ -22,7 +22,7 @@ namespace AutoRest.CSharp.Azure
 {
     public class CodeGeneratorCsa : CodeGeneratorCs
     {
-        private const string ClientRuntimePackage = "Microsoft.Rest.ClientRuntime.Azure.3.3.8";
+        private new const string ClientRuntimePackage = "Microsoft.Rest.ClientRuntime.Azure.3.3.8";
 
         public override string UsageInstructions => string.Format(CultureInfo.InvariantCulture,
             Properties.Resources.UsageInformation, ClientRuntimePackage);
