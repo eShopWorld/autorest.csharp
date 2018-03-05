@@ -29,6 +29,7 @@ namespace AutoRest.CSharp.Azure.Model
             {
                 yield return "Microsoft.Rest";
                 yield return "Microsoft.Rest.Azure";
+                yield return "Microsoft.AspNetCore.Http";
 
                 if (HaveModelNamespace)
                 {

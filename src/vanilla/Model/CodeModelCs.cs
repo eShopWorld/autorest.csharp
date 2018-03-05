@@ -29,7 +29,7 @@ namespace AutoRest.CSharp.Model
         public virtual IEnumerable<string> Usings
         {
             get
-            {
+            {                
                 if (HaveModelNamespace)
                 {
                     yield return ModelsName;

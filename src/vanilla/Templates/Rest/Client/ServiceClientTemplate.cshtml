@@ -11,6 +11,7 @@ namespace @Settings.Namespace
 @foreach (var usingString in Model.Usings) {
     @:using @usingString;
 }
+    using Microsoft.AspNetCore.Http;
 @EmptyLine
     @if (!string.IsNullOrWhiteSpace(Model.Documentation))
     {

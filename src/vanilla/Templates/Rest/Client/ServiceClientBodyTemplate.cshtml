@@ -24,6 +24,12 @@ else
 public Newtonsoft.Json.JsonSerializerSettings SerializationSettings { get; private set; }
 @EmptyLine
 
+/// <summary> 
+/// http context accessor
+/// </summary>
+public IHttpContextAccessor httpContextAccessor {get; set;}
+@EmptyLine
+
 /// <summary>
 /// Gets or sets json deserialization settings.
 /// </summary>
@@ -54,8 +60,12 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 /// <param name='handlers'>
 /// Optional. The delegating handlers to add to the http client pipeline.
 /// </param>
-@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(params System.Net.Http.DelegatingHandler[] handlers) : base(handlers)
+/// <param name='httpContextAccessor'>
+/// required - http context accessor instance
+/// </param>
+@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, params System.Net.Http.DelegatingHandler[] handlers) : base(handlers)
 {
+    this.httpContextAccessor = httpContextAccessor;
     this.Initialize();
 }
 @EmptyLine
@@ -63,14 +73,18 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 /// <summary>
 /// Initializes a new instance of the @Model.Name class.
 /// </summary>
+/// <param name='httpContextAccessor'>
+/// required - http context accessor instance
+/// </param>
 /// <param name='rootHandler'>
 /// Optional. The http client handler used to handle http transport.
 /// </param>
 /// <param name='handlers'>
 /// Optional. The delegating handlers to add to the http client pipeline.
 /// </param>
-@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : base(rootHandler, handlers)
+@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : base(rootHandler, handlers)
 {
+    this.httpContextAccessor = httpContextAccessor;
     this.Initialize();
 }
 @EmptyLine
@@ -80,6 +94,9 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 @:/// <summary>
 @:/// Initializes a new instance of the @Model.Name class.
 @:/// </summary>
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='baseUri'>
 @:/// Optional. The base URI of the service.
 @:/// </param>
@@ -89,7 +106,7 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, params System.Net.Http.DelegatingHandler[] handlers) : this(handlers)
+@:@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, System.Uri baseUri, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, handlers)
 @:{
 @:    if (baseUri == null)
 @:    {
@@ -103,6 +120,9 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 @:/// <summary>
 @:/// Initializes a new instance of the @Model.Name class.
 @:/// </summary>
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='baseUri'>
 @:/// Optional. The base URI of the service.
 @:/// </param>
@@ -115,7 +135,7 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(rootHandler, handlers)
+@:@(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, System.Uri baseUri, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, rootHandler, handlers)
 @:{
 @:    if (baseUri == null)
 @:    {
@@ -139,13 +159,16 @@ foreach (var param in parameters)
 @:/// Required. @(param.Documentation)
 @:/// </param>
 }
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='handlers'>
 @:/// Optional. The delegating handlers to add to the http client pipeline.
 @:/// </param>
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ConstructorVisibility) @(Model.Name)(@(Model.RequiredConstructorParameters), params System.Net.Http.DelegatingHandler[] handlers) : this(handlers)
+@:@(Model.ConstructorVisibility) @(Model.Name)(@(Model.RequiredConstructorParameters), IHttpContextAccessor httpContextAccessor, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, handlers)
 @:{
 foreach (var param in parameters)
 {
@@ -177,6 +200,9 @@ foreach (var param in parameters)
 @:/// Required. @(param.Documentation)
 @:/// </param>
 }
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='rootHandler'>
 @:/// Optional. The http client handler used to handle http transport.
 @:/// </param>
@@ -186,7 +212,7 @@ foreach (var param in parameters)
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ConstructorVisibility) @(Model.Name)(@(Model.RequiredConstructorParameters), System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(rootHandler, handlers)
+@:@(Model.ConstructorVisibility) @(Model.Name)(@(Model.RequiredConstructorParameters), IHttpContextAccessor httpContextAccessor, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, rootHandler, handlers)
 @:{
 foreach (var param in parameters)
 {
@@ -223,13 +249,16 @@ foreach (var param in parameters)
 @:/// Required. @(param.Documentation)
 @:/// </param>
 }
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='handlers'>
 @:/// Optional. The delegating handlers to add to the http client pipeline.
 @:/// </param>
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, @(Model.RequiredConstructorParameters), params System.Net.Http.DelegatingHandler[] handlers) : this(handlers)
+@:@(Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, @(Model.RequiredConstructorParameters), IHttpContextAccessor httpContextAccessor, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, handlers)
 @:{
 @:    if (baseUri == null)
 @:    {
@@ -272,6 +301,9 @@ foreach (var param in parameters)
 @:/// Required. @(param.Documentation)
 @:/// </param>
 }
+@:/// <param name='httpContextAccessor'>
+@:/// required - http context accessor instance
+@:/// </param>
 @:/// <param name='rootHandler'>
 @:/// Optional. The http client handler used to handle http transport.
 @:/// </param>
@@ -281,7 +313,7 @@ foreach (var param in parameters)
 @:/// <exception cref="System.ArgumentNullException">
 @:/// Thrown when a required parameter is null
 @:/// </exception>
-@:@(Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, @(Model.RequiredConstructorParameters), System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(rootHandler, handlers)
+@:@(Model.ConstructorVisibility) @(Model.Name)(System.Uri baseUri, @(Model.RequiredConstructorParameters), IHttpContextAccessor httpContextAccessor, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : this(httpContextAccessor, rootHandler, handlers)
 @:{
 @:    if (baseUri == null)
 @:    {
