@@ -27,7 +27,7 @@ public Newtonsoft.Json.JsonSerializerSettings SerializationSettings { get; priva
 /// <summary> 
 /// http context accessor
 /// </summary>
-public IHttpContextAccessor httpContextAccessor {get; set;}
+public IHttpContextAccessor httpContextAccessor {get; private set;}
 @EmptyLine
 
 /// <summary>
@@ -65,6 +65,9 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 /// </param>
 @(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, params System.Net.Http.DelegatingHandler[] handlers) : base(handlers)
 {
+    if (httpContextAccessor==null)
+        throw new ArgumentNullException("httpContextAccessor cannot be null");
+    @EmptyLine
     this.httpContextAccessor = httpContextAccessor;
     this.Initialize();
 }
@@ -84,6 +87,9 @@ public Newtonsoft.Json.JsonSerializerSettings DeserializationSettings { get; pri
 /// </param>
 @(Model.ContainsCredentials ? "protected" : Model.ConstructorVisibility) @(Model.Name)(IHttpContextAccessor httpContextAccessor, System.Net.Http.HttpClientHandler rootHandler, params System.Net.Http.DelegatingHandler[] handlers) : base(rootHandler, handlers)
 {
+    if (httpContextAccessor==null)
+        throw new ArgumentNullException("httpContextAccessor cannot be null");
+    @EmptyLine
     this.httpContextAccessor = httpContextAccessor;
     this.Initialize();
 }
