@@ -122,7 +122,9 @@ if (customHeaders != null)
     }
 }
 @EmptyLine
-
+var correlationVector = this.httpContextAccessor.HttpContext.GetCorrelationVector();
+_httpRequest.Headers.TryAddWithoutValidation(CorrelationVector.CorrelationVectorHeaderName, correlationVector.ToString());
+@EmptyLine
 // Serialize Request
 string _requestContent = null;
 @if (Model.RequestBody != null)

@@ -27,6 +27,7 @@ namespace AutoRest.CSharp.Unit.Tests {
 
     using IAnyPlugin = AutoRest.Core.Extensibility.IPlugin<AutoRest.Core.Extensibility.IGeneratorSettings, AutoRest.Core.IModelSerializer<AutoRest.Core.Model.CodeModel>, AutoRest.Core.ITransformer<AutoRest.Core.Model.CodeModel>, AutoRest.Core.CodeGenerator, AutoRest.Core.CodeNamer, AutoRest.Core.Model.CodeModel>;
     using Microsoft.AspNetCore.Http;
+    using Eshopworld.Web.Correlation;
 
     public class BugTest {
         internal static string[] SuppressWarnings = {"CS1701","CS1702", "CS1591"};
@@ -121,7 +122,8 @@ namespace AutoRest.CSharp.Unit.Tests {
             Path.Combine(FRAMEWORK, "System.Collections.Concurrent.dll"),
             Path.Combine(FRAMEWORK, "System.Text.Encoding.dll"),
             Path.Combine(FRAMEWORK, "System.Text.RegularExpressions.dll"),
-            Path.Combine(FRAMEWORK, "System.IO.dll"),   
+            Path.Combine(FRAMEWORK, "System.IO.dll"),
+            Path.Combine(FRAMEWORK, "netstandard.dll"),
 
 
             typeof(HttpClient).GetAssembly().Location,
@@ -138,7 +140,9 @@ namespace AutoRest.CSharp.Unit.Tests {
             typeof(ActionContext).GetAssembly().Location,
             typeof(InlineRouteParameterParser).GetAssembly().Location,
             typeof(ControllerBase).GetAssembly().Location,
-            typeof(IHttpContextAccessor).GetAssembly().Location
+            typeof(IHttpContextAccessor).GetAssembly().Location,
+            typeof(CorrelationVector).GetAssembly().Location
+
 
         };
 

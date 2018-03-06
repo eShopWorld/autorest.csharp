@@ -11,6 +11,9 @@ namespace @Settings.Namespace
 @foreach (var usingString in Model.Usings) {
 @:    using @usingString;
 }
+    using System;
+    using Eshopworld.Web.Correlation;
+    using Microsoft.AspNetCore.Http;
 @EmptyLine
     /// <summary>
     /// @(Model.TypeName) operations.
@@ -33,12 +36,15 @@ namespace @Settings.Namespace
                 throw new System.ArgumentNullException("client");
             }
             this.Client = client;
+            this.httpContextAccessor = client.httpContextAccessor;
         }
         @EmptyLine
         /// <summary>
         /// Gets a reference to the @Model.CodeModel.Name
         /// </summary>
         public @Model.CodeModel.Name Client { get; private set; }
+        @EmptyLine
+        public IHttpContextAccessor httpContextAccessor {get; private set;}
         @EmptyLine
         @foreach (var method in Model.Methods)
         {

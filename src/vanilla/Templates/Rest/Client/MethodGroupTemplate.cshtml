@@ -7,18 +7,23 @@ namespace @Settings.Namespace
     using System.Linq;
     using System.IO;
     using Microsoft.Rest;
-@foreach (var usingString in Model.Usings) {
+    using System;
+    using Eshopworld.Web.Correlation;
+    using Microsoft.AspNetCore.Http;
+@foreach (var usingString in Model.Usings)
+{
     @:using @usingString;
 }
 @EmptyLine
     /// <summary>
     /// @(Model.TypeName) operations.
-    /// </summary>
-    public partial class @(Model.TypeName) : Microsoft.Rest.IServiceOperations<@Model.CodeModel.Name>, I@(Model.TypeName)
-    {
+    ///</summary>
+    public partial class @(Model.TypeName) : Microsoft.Rest.IServiceOperations<@Model.CodeModel.Name>
+        , I@(Model.TypeName)
+        {
         /// <summary>
         /// Initializes a new instance of the @(Model.TypeName) class.
-        /// </summary>
+        /// </summary>        
         /// <param name='client'>
         /// Reference to the service client.
         /// </param>
@@ -27,11 +32,13 @@ namespace @Settings.Namespace
         /// </exception>
         public @(Model.TypeName)(@Model.CodeModel.Name client)
         {
-            if (client == null) 
+            if (client == null)
             {
                 throw new System.ArgumentNullException("client");
             }
             this.Client = client;
+            @EmptyLine           
+            this.httpContextAccessor = client.httpContextAccessor;
         }
         @EmptyLine
         /// <summary>
@@ -39,10 +46,16 @@ namespace @Settings.Namespace
         /// </summary>
         public @Model.CodeModel.Name Client { get; private set; }
         @EmptyLine
+
+        /// <summary>
+        /// instance of http context accessor
+        /// </summary>
+        public IHttpContextAccessor httpContextAccessor {get; private set;}
+        @EmptyLine
         @foreach (MethodCs method in Model.Methods)
         {
-        @:@(Include(new MethodTemplate(), method))
-        @EmptyLine
+            @:@(Include(new MethodTemplate(), method))
+            @EmptyLine
         }
-    }
-}
+        }
+        }
