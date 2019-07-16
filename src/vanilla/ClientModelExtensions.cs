@@ -19,6 +19,16 @@ namespace AutoRest.CSharp
 {
     public static class ClientModelExtensions
     {
+        private static string GetObsoleteAttribute(string message)
+            => message == null ? "" : $"[System.Obsolete({Newtonsoft.Json.JsonConvert.SerializeObject(message)})]\n";
+
+        public static string GetObsoleteAttribute(this IVariable x)
+            => GetObsoleteAttribute(x.DeprecationMessage);
+        public static string GetObsoleteAttribute(this IModelType x)
+            => GetObsoleteAttribute(x.DeprecationMessage);
+        public static string GetObsoleteAttribute(this Method x)
+            => GetObsoleteAttribute(x.DeprecationMessage);
+
         /// <summary>
         /// Determine whether URL encoding should be skipped for this parameter
         /// </summary>
@@ -202,7 +212,7 @@ namespace AutoRest.CSharp
 
             PrimaryType primaryType = sequence.ElementType as PrimaryType;
             EnumType enumType = sequence.ElementType as EnumType;
-            if (enumType != null && enumType.ModelAsString)
+            if (enumType != null && enumType.OldModelAsString)
             {
                 primaryType = New<PrimaryType>(KnownPrimaryType.String);
             }
@@ -244,7 +254,7 @@ namespace AutoRest.CSharp
                 pt.KnownPrimaryType == KnownPrimaryType.String &&
                 pt.KnownFormat != KnownFormat.@char ||
             t is EnumType et &&
-                et.ModelAsString;
+                (et.OldModelAsString || (string.IsNullOrEmpty(et.Name) && et.ModelAsString));
 
         /// <summary>
         /// Simple conversion of the type to string
@@ -434,7 +444,7 @@ namespace AutoRest.CSharp
                     case Constraint.UniqueItems:
                         if ("true".EqualsIgnoreCase(constraints[constraint]))
                         {
-                            constraintCheck = $"{valueReference}.Count != {valueReference}.Distinct().Count()";
+                            constraintCheck = $"{valueReference}.Count != System.Linq.Enumerable.Count(System.Linq.Enumerable.Distinct({valueReference}))";
                         }
                         else
                         {
