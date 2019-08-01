@@ -16,7 +16,10 @@ namespace @(Settings.Namespace).@(Settings.ModelsName)
     @WrapComment("/// ", "Determine base value for a given allowed value if exists, else return the value itself")
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(@(Model.ClassName + "Converter")))]
-    @(Model.GetObsoleteAttribute())
+@if (Model.Deprecated)
+{
+    @:[System.Obsolete()]
+}
     public struct @Model.ClassName : System.IEquatable<@Model.ClassName>
     {
         private @Model.ClassName@("("+underlyingType) underlyingValue)
@@ -81,7 +84,7 @@ namespace @(Settings.Namespace).@(Settings.ModelsName)
         /// </summary>
         public override string ToString()
         { 
-            return UnderlyingValue == null ? null : UnderlyingValue.ToString(); 
+            return UnderlyingValue.ToString(); 
         }
 
         @EmptyLine

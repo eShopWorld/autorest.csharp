@@ -50,19 +50,6 @@ namespace Fixtures.PetstoreV2NoSync
         /// <summary>
         /// Initializes a new instance of the SwaggerPetstoreV2 class.
         /// </summary>
-        /// <param name='httpClient'>
-        /// HttpClient to be used
-        /// </param>
-        /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling SwaggerPetstoreV2.Dispose(). False: will not dispose provided httpClient</param>
-        public SwaggerPetstoreV2(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
-        {
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the SwaggerPetstoreV2 class.
-        /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
@@ -975,22 +962,14 @@ namespace Fixtures.PetstoreV2NoSync
             {
                 StreamContent _fileContent = new StreamContent(fileContent);
                 _fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
-                _contentDispositionHeaderValue.Name = "fileContent";
-                // get filename from stream if it's a file otherwise, just use  'unknown'
-                var _fileStream = fileContent as FileStream;
-                var _fileName = (_fileStream != null ? _fileStream.Name : null) ?? "unknown";
-                if(System.Linq.Enumerable.Any(_fileName, c => c > 127) )
+                FileStream _fileContentAsFileStream = fileContent as FileStream;
+                if (_fileContentAsFileStream != null)
                 {
-                    // non ASCII chars detected, need UTF encoding:
-                    _contentDispositionHeaderValue.FileNameStar = _fileName;
+                    ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                    _contentDispositionHeaderValue.Name = "fileContent";
+                    _contentDispositionHeaderValue.FileName = _fileContentAsFileStream.Name;
+                    _fileContent.Headers.ContentDisposition = _contentDispositionHeaderValue;
                 }
-                else
-                {
-                    // ASCII only
-                    _contentDispositionHeaderValue.FileName = _fileName;
-                }
-                _fileContent.Headers.ContentDisposition = _contentDispositionHeaderValue;
                 _multiPartContent.Add(_fileContent, "fileContent");
             }
             if (fileName != null)

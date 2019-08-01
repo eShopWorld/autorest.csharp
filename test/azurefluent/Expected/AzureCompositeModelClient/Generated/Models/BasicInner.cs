@@ -31,7 +31,7 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient.Models
         /// does not fit on a single line and a line break.</param>
         /// <param name="color">Possible values include: 'cyan', 'Magenta',
         /// 'YELLOW', 'blacK'</param>
-        public BasicInner(int? id = default(int?), string name = default(string), CMYKColors? color = default(CMYKColors?))
+        public BasicInner(int? id = default(int?), string name = default(string), string color = default(string))
         {
             Id = id;
             Name = name;
@@ -62,7 +62,7 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient.Models
         /// 'blacK'
         /// </summary>
         [JsonProperty(PropertyName = "color")]
-        public CMYKColors? Color { get; set; }
+        public string Color { get; set; }
 
     }
 }

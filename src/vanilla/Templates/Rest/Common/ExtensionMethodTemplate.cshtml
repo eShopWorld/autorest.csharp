@@ -27,13 +27,16 @@ if (Model.SyncMethods == SyncMethodsGenerationMode.All || Model.SyncMethods == S
 @:/// <param name='operations'>
 @:/// The operations group for this extension method.
 @:/// </param>
-    foreach (ParameterCs parameter in Model.LocalParameters)
+    foreach (var parameter in Model.LocalParameters)
     {
 @:/// <param name='@parameter.Name'>
-@:@WrapComment("/// ", parameter.DocumentationString.EscapeXmlComment())
+@:@WrapComment("/// ", parameter.Documentation.EscapeXmlComment())
 @:/// </param>
     }
-@(Model.GetObsoleteAttribute())
+@if (Model.Deprecated)
+{
+@:[System.Obsolete()]
+}
 @:@((Model as MethodCs).AccessModifier) static @Model.ReturnTypeString @(Model.Name)(@Model.GetExtensionParameters(Model.GetSyncMethodParameterDeclaration(false)))
 @:{
     if (Model.ReturnType.Body != null)
@@ -71,16 +74,19 @@ if (!String.IsNullOrEmpty(Model.Description) && !String.IsNullOrEmpty(Model.Summ
 @:/// <param name='operations'>
 @:/// The operations group for this extension method.
 @:/// </param>
-foreach (ParameterCs parameter in Model.LocalParameters)
+foreach (var parameter in Model.LocalParameters)
 {
 @:/// <param name='@parameter.Name'>
-@:@WrapComment("/// ", parameter.DocumentationString.EscapeXmlComment())
+@:@WrapComment("/// ", parameter.Documentation.EscapeXmlComment())
 @:/// </param>
 }
 @:/// <param name='cancellationToken'>
 @:/// The cancellation token.
 @:/// </param>
-@(Model.GetObsoleteAttribute())
+@if (Model.Deprecated)
+{
+@:[System.Obsolete()]
+}
 @:@((Model as MethodCs).AccessModifier) static async @Model.TaskExtensionReturnTypeString @(Model.Name)Async(@Model.GetExtensionParameters(Model.GetAsyncMethodParameterDeclaration()))
 @:{
     if (Model.ReturnType.Body != null)
@@ -134,16 +140,19 @@ foreach (ParameterCs parameter in Model.LocalParameters)
 @:/// <param name='operations'>
 @:/// The operations group for this extension method.
 @:/// </param>
-    foreach (ParameterCs parameter in Model.LocalParameters)
+    foreach (var parameter in Model.LocalParameters)
     {
 @:/// <param name='@parameter.Name'>
-@:@WrapComment("/// ", parameter.DocumentationString.EscapeXmlComment())
+@:@WrapComment("/// ", parameter.Documentation.EscapeXmlComment())
 @:/// </param>
     }
 @:/// <param name='customHeaders'>
 @:/// Headers that will be added to request.
 @:/// </param>
-@(Model.GetObsoleteAttribute())
+@if (Model.Deprecated)
+{
+@:[System.Obsolete()]
+}
 @:@((Model as MethodCs).AccessModifier) static @Model.OperationResponseReturnTypeString @(Model.Name)WithHttpMessages(@Model.GetExtensionParameters(Model.GetSyncMethodParameterDeclaration(true)))
 @:{
 @:    return operations.@(Model.Name)WithHttpMessagesAsync(@(Model.GetAsyncMethodInvocationArgs("customHeaders", "System.Threading.CancellationToken.None"))).ConfigureAwait(false).GetAwaiter().GetResult();

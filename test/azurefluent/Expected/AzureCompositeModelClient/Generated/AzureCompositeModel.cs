@@ -55,20 +55,19 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
         public string SubscriptionId { get; private set; }
 
         /// <summary>
-        /// The preferred language for the response.
+        /// Gets or sets the preferred language for the response.
         /// </summary>
         public string AcceptLanguage { get; set; }
 
         /// <summary>
-        /// The retry timeout in seconds for Long Running Operations. Default value is
-        /// 30.
+        /// Gets or sets the retry timeout in seconds for Long Running Operations.
+        /// Default value is 30.
         /// </summary>
         public int? LongRunningOperationRetryTimeout { get; set; }
 
         /// <summary>
-        /// Whether a unique x-ms-client-request-id should be generated. When set to
-        /// true a unique x-ms-client-request-id value is generated and included in
-        /// each request. Default is true.
+        /// When set to true a unique x-ms-client-request-id value is generated and
+        /// included in each request. Default is true.
         /// </summary>
         public bool? GenerateClientRequestId { get; set; }
 
@@ -111,24 +110,6 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
         /// Gets the IReadonlypropertyOperations.
         /// </summary>
         public virtual IReadonlypropertyOperations Readonlyproperty { get; private set; }
-
-        /// <summary>
-        /// Gets the IFlattencomplexOperations.
-        /// </summary>
-        public virtual IFlattencomplexOperations Flattencomplex { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the AzureCompositeModel class.
-        /// </summary>
-        /// <param name='httpClient'>
-        /// HttpClient to be used
-        /// </param>
-        /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling AzureCompositeModel.Dispose(). False: will not dispose provided httpClient</param>
-        protected AzureCompositeModel(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
-        {
-            Initialize();
-        }
 
         /// <summary>
         /// Initializes a new instance of the AzureCompositeModel class.
@@ -213,33 +194,6 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
         /// Thrown when a required parameter is null
         /// </exception>
         public AzureCompositeModel(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
-        {
-            if (credentials == null)
-            {
-                throw new System.ArgumentNullException("credentials");
-            }
-            Credentials = credentials;
-            if (Credentials != null)
-            {
-                Credentials.InitializeServiceClient(this);
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the AzureCompositeModel class.
-        /// </summary>
-        /// <param name='credentials'>
-        /// Required. Credentials needed for the client to connect to Azure.
-        /// </param>
-        /// <param name='httpClient'>
-        /// HttpClient to be used
-        /// </param>
-        /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling AzureCompositeModel.Dispose(). False: will not dispose provided httpClient</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        public AzureCompositeModel(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -366,7 +320,6 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
             Polymorphism = new PolymorphismOperations(this);
             Polymorphicrecursive = new PolymorphicrecursiveOperations(this);
             Readonlyproperty = new ReadonlypropertyOperations(this);
-            Flattencomplex = new FlattencomplexOperations(this);
             BaseUri = new System.Uri("http://localhost:3000");
             SubscriptionId = "123456";
             AcceptLanguage = "en-US";
@@ -385,7 +338,6 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
                         new Iso8601TimeSpanConverter()
                     }
             };
-            SerializationSettings.Converters.Add(new TransformationJsonConverter());
             DeserializationSettings = new JsonSerializerSettings
             {
                 DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat,
@@ -400,10 +352,7 @@ namespace Fixtures.Azure.Fluent.AzureCompositeModelClient
             };
             SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<FishInner>("fishtype"));
             DeserializationSettings.Converters.Add(new PolymorphicDeserializeJsonConverter<FishInner>("fishtype"));
-            SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<MyBaseTypeInner>("kind"));
-            DeserializationSettings.Converters.Add(new PolymorphicDeserializeJsonConverter<MyBaseTypeInner>("kind"));
             CustomInitialize();
-            DeserializationSettings.Converters.Add(new TransformationJsonConverter());
             DeserializationSettings.Converters.Add(new CloudErrorJsonConverter());
         }
         /// <summary>

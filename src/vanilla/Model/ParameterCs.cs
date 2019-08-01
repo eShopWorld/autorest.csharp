@@ -60,11 +60,5 @@ namespace AutoRest.CSharp.Model
             => !string.IsNullOrEmpty(DefaultValue) && ModelType is PrimaryType
             ? DefaultValue.Value
             : $"default({ModelTypeName})";
-
-        public string DocumentationString => (
-            this.DeprecationMessage != null
-                ? base.Documentation + "\nCAUTION: " + this.DeprecationMessage
-                : (string)base.Documentation
-            ).Trim();
     }
 }

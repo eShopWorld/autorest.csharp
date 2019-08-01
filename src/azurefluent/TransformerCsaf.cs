@@ -5,7 +5,6 @@
 using System.Linq;
 using AutoRest.Core;
 using AutoRest.Core.Model;
-using AutoRest.Core.Utilities;
 using AutoRest.CSharp.Azure.Fluent.Model;
 using AutoRest.CSharp.Azure.Model;
 using AutoRest.CSharp.Model;
@@ -55,7 +54,9 @@ namespace AutoRest.CSharp.Azure.Fluent
             {
                 foreach (var model in codeModel.ModelTypes)
                 {
-                    if (true == model.BaseModelType?.Extensions?.Get<bool>(AzureExtensions.AzureResourceExtension) && model.Name != "ProxyResource" && model.Name != "TrackedResource")
+                    if ((model.BaseModelType != null) && (model.BaseModelType.Extensions != null) &&
+                        model.BaseModelType.Extensions.ContainsKey(AzureExtensions.AzureResourceExtension) &&
+                        (bool) model.BaseModelType.Extensions[AzureExtensions.AzureResourceExtension])
                     {
                         if (model.BaseModelType.Name == "Resource")
                         {
@@ -92,16 +93,23 @@ namespace AutoRest.CSharp.Azure.Fluent
 
         private void AppendInnerToTopLevelType(IModelType type, CodeModelCsaf codeModel)
         {
-            if ((type is CompositeType compositeType) && !codeModel._innerTypes.Contains(compositeType))
+            if (type == null)
+            {
+                return;
+            }
+            var compositeType = type as CompositeType;
+            var sequenceType = type as SequenceType;
+            var dictionaryType = type as DictionaryType;
+            if ((compositeType != null) && !codeModel._innerTypes.Contains(compositeType))
             {
                 compositeType.Name.FixedValue = compositeType.Name + "Inner";
                 codeModel._innerTypes.Add(compositeType);
             }
-            else if (type is SequenceType sequenceType)
+            else if (sequenceType != null)
             {
                 AppendInnerToTopLevelType(sequenceType.ElementType, codeModel);
             }
-            else if (type is DictionaryType dictionaryType)
+            else if (dictionaryType != null)
             {
                 AppendInnerToTopLevelType(dictionaryType.ValueType, codeModel);
             }
@@ -120,19 +128,22 @@ namespace AutoRest.CSharp.Azure.Fluent
 
         private void AddNamespaceToResourceType(IModelType type, CodeModelCsa serviceClient)
         {
+            var compositeType = type as CompositeType;
+            var sequenceType = type as SequenceType;
+            var dictionaryType = type as DictionaryType;
             // SubResource property { get; set; } => Microsoft.Rest.Azure.SubResource property { get; set; }
-            if ((type is CompositeType compositeType) &&
+            if ((compositeType != null) &&
                 (compositeType.Name.Equals("Resource") || compositeType.Name.Equals("SubResource")))
             {
                 compositeType.Name.FixedValue = "Microsoft.Rest.Azure." + compositeType.Name;
             }
             // iList<SubResource> property { get; set; } => iList<Microsoft.Rest.Azure.SubResource> property { get; set; }
-            else if (type is SequenceType sequenceType)
+            else if (sequenceType != null)
             {
                 AddNamespaceToResourceType(sequenceType.ElementType, serviceClient);
             }
             // IDictionary<string, SubResource> property { get; set; } => IDictionary<string, Microsoft.Rest.Azure.SubResource> property { get; set; }
-            else if (type is DictionaryType dictionaryType)
+            else if (dictionaryType != null)
             {
                 AddNamespaceToResourceType(dictionaryType.ValueType, serviceClient);
             }

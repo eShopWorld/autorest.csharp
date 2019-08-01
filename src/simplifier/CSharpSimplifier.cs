@@ -25,8 +25,6 @@ namespace AutoRest.Simplify
 
         public async Task Run(MemoryFileSystem fs)
         {
-            string[] skipNamespace = (await Settings.Instance.Host.GetValue<string[]>("skip-simplifier-on-namespace"));
-            
             var files = fs.GetFiles("", "*.cs", SearchOption.AllDirectories).
                 ToDictionary(each => each, each => fs.ReadAllText(each));
 
@@ -63,7 +61,7 @@ namespace AutoRest.Simplify
                     var newRoot = await document.GetSyntaxRootAsync();
 
                     // get the namespaces used in the file
-                    var names = new GetQualifiedNames().GetNames(newRoot).Where( each => ! skipNamespace.Any( ns => ns == each )).ToArray();
+                    var names = new GetQualifiedNames().GetNames(newRoot).Where( each => each != "System.Security.Permissions").ToArray();
 
                     // add the usings that we found
                     newRoot = new AddUsingsRewriter(names).Visit(newRoot);
