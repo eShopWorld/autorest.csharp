@@ -43,7 +43,7 @@ namespace @Settings.Namespace
         foreach (ParameterCs parameter in method.LocalParameters)
         {
         @:/// <param name='@parameter.Name'>
-        @:@WrapComment("/// ", parameter.DocumentationString.EscapeXmlComment())
+        @:@WrapComment("/// ", parameter.Documentation.EscapeXmlComment())
         @:/// </param>
         }
         @:/// <param name='customHeaders'>
@@ -67,7 +67,10 @@ namespace @Settings.Namespace
         @:/// Thrown when a required parameter is null
         @:/// </exception>
         }
-        @:@(method.GetObsoleteAttribute())
+        @if (method.Deprecated)
+        {
+        @:[System.Obsolete()]
+        }
         @:System.Threading.Tasks.Task<@method.OperationResponseReturnTypeString> @(method.Name)WithHttpMessagesAsync(@(method.GetAsyncMethodParameterDeclaration(true)));
     }
     }

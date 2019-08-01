@@ -85,11 +85,6 @@ namespace AutoRest.CSharp
                     fs.WriteAllText(file, await ReadFile(file));
                 }
 
-                new Settings
-                {
-                    Host = this
-                };
-
                 // simplify
                 new AutoRest.Simplify.CSharpSimplifier().Run(fs).ConfigureAwait(false).GetAwaiter().GetResult();
                 await WriteFiles(fs);

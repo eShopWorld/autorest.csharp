@@ -52,7 +52,7 @@ namespace Fixtures.ExtensibleEnums.Models
         /// </summary>
         public override string ToString()
         {
-            return UnderlyingValue == null ? null : UnderlyingValue.ToString();
+            return UnderlyingValue.ToString();
         }
 
         /// <summary>

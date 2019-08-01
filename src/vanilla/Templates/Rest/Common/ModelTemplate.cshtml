@@ -33,7 +33,10 @@ namespace @(Settings.Namespace).@(Settings.ModelsName)
 {
     @:[Microsoft.Rest.Serialization.JsonTransformation]
 }
-    @(Model.GetObsoleteAttribute())
+@if (Model.Deprecated)
+{
+    @:[System.Obsolete()]
+}
     public partial class @Model.Name@(Model.BaseModelType != null ? " : " + Model.BaseModelType.Name : "")
     {
         /// <summary>
@@ -128,7 +131,10 @@ switch (property.Flavor)
     default:
         throw new System.NotImplementedException();
 }
-        @:@(property.GetObsoleteAttribute())
+if (property.Deprecated)
+{
+        @:[System.Obsolete()]
+}
 switch (property.Flavor)
 {
     case PropertyFlavor.ForwardTo:
@@ -172,7 +178,10 @@ foreach (var conv in property.JsonConverters)
         @:[Newtonsoft.Json.JsonConverter(typeof(@conv))]
 }
         @:[Newtonsoft.Json.JsonProperty(PropertyName = "@property.SerializedName")]
-        @:@(property.GetObsoleteAttribute())
+if (property.Deprecated)
+{
+        @:[System.Obsolete()]
+}
         @:public static @property.ModelTypeName @property.Name { get; private set; }
         @EmptyLine
 }
